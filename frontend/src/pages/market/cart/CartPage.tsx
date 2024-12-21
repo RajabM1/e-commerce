@@ -2,7 +2,7 @@ import Root from "../Root";
 import OrderSummary from "../../../components/market/cart/OrderSummary";
 import CustomerTrustSection from "../../../components/market/cart/CustomerTrustSection";
 import ProductList from "../../../components/market/cart/ProductList";
-import { useMarketPage } from "../../../features/product/hooks/useMarketPage";
+import { useProduct } from "../../../features/product/hooks/useProduct";
 import { useTranslation } from "react-i18next";
 import ProductSlider from "../../../components/market/slider/ProductSlider";
 import Container from "@mui/material/Container";
@@ -16,7 +16,7 @@ import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
 const CartPage = () => {
     const { t } = useTranslation("cart-page");
     const { cartItems, cartQuantity } = useShoppingCart();
-    const { itemsOnDiscount } = useMarketPage();
+    const { itemsOnDiscount } = useProduct();
     return (
         <Root>
             <Container maxWidth="xl" className="cart-page">

@@ -1,14 +1,14 @@
 import Root from "./Root";
 import Container from "@mui/material/Container";
 import ProductList from "../../components/market/product/ProductList";
-import { useMarketPage } from "../../hooks/items/useMarketPage";
+import { useProduct } from "../../features/product/hooks/useProduct";
 import MultipleRowsSlider from "../../components/market/slider/MultipleRowsSlider";
 import ProductSlider from "../../components/market/slider/ProductSlider";
 import "../../../styles/pages/market/Home.scss";
 import { useCategory } from "../../features/categories/context";
 
 const Home = () => {
-    const { items, itemsOnDiscount } = useMarketPage();
+    const { items, itemsOnDiscount } = useProduct();
     const { categories } = useCategory();
 
     return (

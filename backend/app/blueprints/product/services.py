@@ -31,3 +31,7 @@ def update_item(original_item, item_to_update):
     updated_item = item_schema.load(item_to_update, instance=original_item)
     db.session.commit()
     return updated_item
+
+
+def get_items_on_discount():
+    return Item.query.filter(Item.discount > 0).all()

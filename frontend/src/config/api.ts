@@ -14,6 +14,7 @@ const endpoints = {
         BY_CATEGORY: (category: string) => `${API_BASE_URL}/items/${category}`,
         BY_ID: (id: number) => `${API_BASE_URL}/items/${id}`,
         ALL: `${API_BASE_URL}/items`,
+        ON_DISCOUNT: `${API_BASE_URL}/items/on-discount`,
     },
     CATEGORY: {
         ALL: `${API_BASE_URL}/categories`,
