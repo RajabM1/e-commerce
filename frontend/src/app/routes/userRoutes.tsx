@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import ProtectedRoute from "./ProtectedRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 import { paths } from "../../config/paths";
 
 const LoginPage = lazy(() => import("../../features/auth/pages/LoginPage"));

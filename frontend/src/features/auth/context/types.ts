@@ -6,6 +6,7 @@ import { resetPasswordForm } from "../schemas/resetPasswordSchema";
 import { UseMutateFunction } from "@tanstack/react-query";
 
 export interface IAuthContext {
+    isLoading: boolean;
     authToken?: string | null;
     currentUser?: User | null;
     handleRegister: UseMutateFunction<unknown, unknown, registerForm, unknown>;

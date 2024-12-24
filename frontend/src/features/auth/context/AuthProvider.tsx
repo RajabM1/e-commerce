@@ -13,8 +13,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     const queryClient = useQueryClient();
     const authToken = getAccessToken();
 
-    const { data: currentUser } = useQuery({
-        initialData: null,
+    const { data: currentUser, isLoading: isUserLoading } = useQuery({
         enabled: !!authToken,
         queryKey: [queryKeys.CURRENT_USER],
         queryFn: () => Services.fetchCurrentUser(authToken),
@@ -24,7 +23,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         mutationFn: Services.login,
         onSuccess: (data) => {
             setTokens(data.access_token, data.refresh_token);
-            queryClient.invalidateQueries({ queryKey: [queryKeys.CURRENT_USER] });
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.CURRENT_USER],
+            });
         },
     });
 
@@ -32,7 +33,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         mutationFn: Services.register,
         onSuccess: (data) => {
             setTokens(data.access_token, data.refresh_token);
-            queryClient.invalidateQueries({ queryKey: [queryKeys.CURRENT_USER] });
+            queryClient.invalidateQueries({
+                queryKey: [queryKeys.CURRENT_USER],
+            });
         },
     });
 
@@ -53,6 +56,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     const valueToReturn = {
+        isLoading: isUserLoading || logoutMutation.status === "pending",
         authToken,
         currentUser,
         handleRegister: registerMutation.mutateAsync,
