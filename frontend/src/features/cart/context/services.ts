@@ -10,14 +10,11 @@ export const addToCart = async ({
     itemId,
     quantity,
     price,
-    event,
 }: {
     itemId: number;
     quantity: number;
     price: number;
-    event?: React.MouseEvent<HTMLButtonElement>;
 }) => {
-    event?.stopPropagation();
     await HttpService.postRequest(endpoints.SHIPPING_CART.CART_ITEMS, {
         itemId,
         quantity,

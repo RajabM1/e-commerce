@@ -58,11 +58,11 @@ const ProductCard = ({ id, name, price, image, category, discount }: Item) => {
                     <Button
                         variant="outlined"
                         onClick={(event) => {
+                            event.stopPropagation();
                             addToCart({
                                 itemId: id,
                                 quantity: 1,
                                 price,
-                                event,
                             });
                         }}
                     >
