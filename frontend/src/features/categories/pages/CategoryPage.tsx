@@ -1,6 +1,6 @@
 import Container from "@mui/material/Container";
 import ProductList from "../../../components/market/product/ProductList";
-import Root from "../../../pages/market/Root";
+import Root from "../../../components/market/layout/Root";
 import { useNavigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";

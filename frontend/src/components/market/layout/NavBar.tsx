@@ -20,7 +20,7 @@ import Badge from "@mui/material/Badge";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../features/auth/context";
 import { useCategory } from "../../../features/categories/context";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
 
 function NavBar() {

@@ -1,4 +1,3 @@
-import { useFetch } from "../../../hooks/shared/useFetch";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { formatCurrency } from "../../../utils/formatCurrency";
@@ -8,17 +7,27 @@ import {
 } from "../../../types/shippingMethods";
 import "../../../../styles/components/market/cart/ShippingMethods.scss";
 import endpoints from "../../../config/api";
+import { useQuery } from "@tanstack/react-query";
+import HttpService from "../../../service/HttpService";
 
 const ShippingMethods = ({
     selectedMethod,
     onSelectMethod,
 }: IShippingMethods) => {
-    const { data: shippingMethods, isLoading } = useFetch(
-        endpoints.ORDER.SHIPPING_METHODS
+    const { data: shippingMethods, isLoading } = useQuery<ShippingMethodType[]>(
+        {
+            queryKey: ["shippingMethods"],
+            queryFn: async () => {
+                const response = await HttpService.getRequest(
+                    endpoints.ORDER.SHIPPING_METHODS
+                );
+                return response.data;
+            },
+        }
     );
 
-    if (isLoading || shippingMethods == null) {
-        return <Typography>Loading... </Typography>;
+    if (isLoading) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -27,7 +36,7 @@ const ShippingMethods = ({
                 Shipping Methods
             </Typography>
             <Box className="methods">
-                {shippingMethods.map((method: ShippingMethodType) => (
+                {shippingMethods?.map((method) => (
                     <Box
                         key={method.id}
                         onClick={() => onSelectMethod(method)}

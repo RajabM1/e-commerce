@@ -8,9 +8,9 @@ import Button from "@mui/material/Button";
 import CouponSection from "./CouponSection";
 import { useState } from "react";
 import DiscountIcon from "@mui/icons-material/Discount";
-import { useOrderSummary } from "../../../hooks/cart/useOrderSummary";
+import { useOrderSummary } from "../hooks/useOrderSummary";
 import { paths } from "../../../config/paths";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import { useShoppingCart } from "../context";
 
 const OrderSummary = () => {
     const { t } = useTranslation("order-summary");

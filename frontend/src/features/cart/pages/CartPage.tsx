@@ -1,17 +1,17 @@
-import Root from "../Root";
-import OrderSummary from "../../../components/market/cart/OrderSummary";
-import CustomerTrustSection from "../../../components/market/cart/CustomerTrustSection";
-import ProductList from "../../../components/market/cart/ProductList";
-import { useProduct } from "../../../features/product/hooks/useProduct";
+import Root from "../../../components/market/layout/Root";
+import OrderSummary from "../components/OrderSummary";
+import CustomerTrustSection from "../components/CustomerTrustSection";
+import ProductList from "../components/ProductList";
+import { useProduct } from "../../product/hooks/useProduct";
 import { useTranslation } from "react-i18next";
 import ProductSlider from "../../../components/market/slider/ProductSlider";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid2 from "@mui/material/Grid2";
-import EmptyCart from "../../../components/market/cart/EmptyCart";
-import "../../../../styles/pages/market/cart/CartPage.scss";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import EmptyCart from "../components/EmptyCart";
+import { useShoppingCart } from "../context";
+import "../styles/CartPage.scss";
 
 const CartPage = () => {
     const { t } = useTranslation("cart-page");

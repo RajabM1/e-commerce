@@ -1,19 +1,15 @@
+import { Box, Button } from "@mui/material";
 import { PaymentElement, AddressElement } from "@stripe/react-stripe-js";
 import { StripeAddressElementOptions } from "@stripe/stripe-js";
-import Button from "@mui/material/Button";
-import { useCheckoutForm } from "../../../hooks/cart/useCheckoutForm";
-import Box from "@mui/material/Box";
+import { useCheckoutForm } from "../hooks/useCheckoutForm";
 import ShippingMethods from "./ShippingMethods";
 
-const CheckoutForm = ({
-    clientSecret,
-    setShippingFees,
-    orderTotal,
-}: {
+interface Props {
     clientSecret: string;
     setShippingFees: React.Dispatch<React.SetStateAction<number | null>>;
     orderTotal: number;
-}) => {
+}
+const CheckoutForm = ({ clientSecret, setShippingFees, orderTotal }: Props) => {
     const {
         isLoading,
         handlePaymentSubmit,
@@ -22,7 +18,9 @@ const CheckoutForm = ({
         selectedShippingMethod,
         handleShippingMethodSelect,
     } = useCheckoutForm(clientSecret, orderTotal);
+
     setShippingFees(selectedShippingMethod?.cost ?? null);
+
     const addressOptions: StripeAddressElementOptions = {
         mode: "shipping",
         fields: {
@@ -40,7 +38,7 @@ const CheckoutForm = ({
     };
 
     return (
-        <Box component="form" onSubmit={handlePaymentSubmit}>
+        <Box component="form" onSubmit={(event) => handlePaymentSubmit(event)}>
             <AddressElement
                 options={addressOptions}
                 onChange={handleAddressChange}

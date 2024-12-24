@@ -18,6 +18,7 @@ export default function ProtectedRoute({
     }
 
     if (
+        currentUser &&
         allowedRoles &&
         allowedRoles.length > 0 &&
         !allowedRoles.includes(getUserRole(currentUser))

@@ -1,9 +1,9 @@
-@use "../../../components/market/cart/ProductList.scss";
-@use "../../../components/market/cart/OrderSummary.scss";
-@use "../../../components/market/cart/CustomerTrustSection.scss";
-@use "../../../components/market/product/QuantitySelector.scss";
-@use "../../../components/market/product/ProductCard.scss";
-@use "../../../main.scss";
+@use "../../../../styles/components/market/cart/ProductList.scss";
+@use "../../../../styles/components/market/cart/OrderSummary.scss";
+@use "../../../../styles/components/market/cart/CustomerTrustSection.scss";
+@use "../../../../styles/components/market/product/QuantitySelector.scss";
+@use "../../../../styles/components/market/product/ProductCard.scss";
+@use "../../../../styles/main.scss";
 .header-box {
     color: #333;
     padding: 2rem;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Item } from "../../features/product/schemas/itemSchema";
+import { Item } from "../../product/schemas/itemSchema";
 
 interface OrderSummary {
     subTotal: number;

@@ -12,15 +12,19 @@ const ForgetPasswordPage = lazy(
 const ResetPasswordPage = lazy(
     () => import("../../features/auth/pages/ResetPasswordPage")
 );
-const Home = lazy(() => import("../../pages/market/Home"));
-const ProductPage = lazy(() => import("../../features/product/pages/ProductPage"));
+const Home = lazy(() => import("../../pages/Home"));
+const ProductPage = lazy(
+    () => import("../../features/product/pages/ProductPage")
+);
 const CategoryPage = lazy(
     () => import("../../features/categories/pages/CategoryPage")
 );
-const CartPage = lazy(() => import("../../pages/market/cart/CartPage"));
-const CheckoutPage = lazy(() => import("../../pages/market/cart/CheckoutPage"));
+const CartPage = lazy(() => import("../../features/cart/pages/CartPage"));
+const CheckoutPage = lazy(
+    () => import("../../features/cart/pages/CheckoutPage")
+);
 const OrderConfirmationPage = lazy(
-    () => import("../../pages/market/cart/OrderConfirmationPage")
+    () => import("../../features/cart/pages/OrderConfirmationPage")
 );
 
 const userRoutes = [

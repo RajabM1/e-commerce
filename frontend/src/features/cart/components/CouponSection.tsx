@@ -1,17 +1,13 @@
-import Button from "@mui/material/Button";
-import Grid2 from "@mui/material/Grid2";
-import TextField from "@mui/material/TextField";
-import { useCoupon } from "../../../hooks/cart/useCoupon";
+import { Button, Grid2, TextField } from "@mui/material";
+import { useCoupon } from "../hooks/useCoupon";
 
-const CouponSection = ({
-    setDiscount,
-    setCouponCode,
-    cartTotal,
-}: {
+interface Props {
     setDiscount: (discount: number) => void;
     setCouponCode: (code: string) => void;
     cartTotal: number;
-}) => {
+}
+
+const CouponSection = ({ setDiscount, setCouponCode, cartTotal }: Props) => {
     const {
         couponCode,
         isCouponApplied,

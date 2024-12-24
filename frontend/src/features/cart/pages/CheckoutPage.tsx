@@ -1,14 +1,14 @@
 import Container from "@mui/material/Container";
-import Root from "../Root";
+import Root from "../../../components/market/layout/Root";
 import Grid2 from "@mui/material/Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import CheckoutForm from "../../../components/market/cart/CheckoutForm";
-import OrderPreview from "../../../components/market/cart/OrderPreview";
+import CheckoutForm from "../components/CheckoutForm";
+import OrderPreview from "../components/OrderPreview";
 import { Elements } from "@stripe/react-stripe-js";
-import { useStripeSetup } from "../../../hooks/cart/useStripeSetup";
+import { useStripeSetup } from "../hooks/useStripeSetup";
 import { useLocation } from "react-router-dom";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import { useShoppingCart } from "../context";
 import { useState } from "react";
 
 const CheckoutPage = () => {

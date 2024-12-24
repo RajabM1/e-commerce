@@ -8,8 +8,8 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import ProductSlider from "../../../components/market/slider/ProductSlider";
 import { useTranslation } from "react-i18next";
 import PriceSection from "../../../components/market/product/PriceSection";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
-import Root from "../../../pages/market/Root";
+import { useShoppingCart } from "../../cart/context";
+import Root from "../../../components/market/layout/Root";
 import "../styles/ProductPage.scss";
 import HttpService from "../../../service/HttpService";
 import endpoints from "../../../config/api";
@@ -78,11 +78,11 @@ const ProductPage = () => {
                                 className="add-to-cart"
                                 variant="contained"
                                 onClick={() => {
-                                    addToCart(
-                                        formData.id ?? 0,
+                                    addToCart({
+                                        itemId: formData.id ?? 0,
                                         quantity,
-                                        formData.price
-                                    );
+                                        price: formData.price,
+                                    });
                                     setQuantity(1);
                                 }}
                             >

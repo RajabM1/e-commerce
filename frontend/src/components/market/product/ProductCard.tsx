@@ -9,7 +9,7 @@ import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
 import PriceSection from "./PriceSection";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
 import { Item } from "../../../features/product/schemas/itemSchema";
 
@@ -57,7 +57,14 @@ const ProductCard = ({ id, name, price, image, category, discount }: Item) => {
                 <CardActions className="card-actions">
                     <Button
                         variant="outlined"
-                        onClick={(e) => addToCart(id ?? 0, 1, price, e)}
+                        onClick={(event) => {
+                            addToCart({
+                                itemId: id,
+                                quantity: 1,
+                                price,
+                                event,
+                            });
+                        }}
                     >
                         Add to Cart
                     </Button>

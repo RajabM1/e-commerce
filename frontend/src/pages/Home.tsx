@@ -1,11 +1,11 @@
-import Root from "./Root";
+import Root from "../components/market/layout/Root";
 import Container from "@mui/material/Container";
-import ProductList from "../../components/market/product/ProductList";
-import { useProduct } from "../../features/product/hooks/useProduct";
-import MultipleRowsSlider from "../../components/market/slider/MultipleRowsSlider";
-import ProductSlider from "../../components/market/slider/ProductSlider";
-import "../../../styles/pages/market/Home.scss";
-import { useCategory } from "../../features/categories/context";
+import ProductList from "../components/market/product/ProductList";
+import { useProduct } from "../features/product/hooks/useProduct";
+import MultipleRowsSlider from "../components/market/slider/MultipleRowsSlider";
+import ProductSlider from "../components/market/slider/ProductSlider";
+import { useCategory } from "../features/categories/context";
+import "../../styles/pages/Home.scss";
 
 const Home = () => {
     const { items, itemsOnDiscount } = useProduct();

@@ -8,16 +8,16 @@ import {
     InputAdornment,
     Grid2,
 } from "@mui/material";
-import Root from "../Root";
+import Root from "../../../components/market/layout/Root";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PaymentIcon from "@mui/icons-material/Payment";
 import HomeIcon from "@mui/icons-material/Home";
-import OrderPreview from "../../../components/market/cart/OrderPreview";
+import OrderPreview from "../components/OrderPreview";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useOrderConfirmation } from "../../../hooks/cart/useOrderConfirmation";
+import { useOrderConfirmation } from "../hooks/useOrderConfirmation";
 import "../../../../styles/components/market/cart/OrderConfirmation.scss";
 import { paths } from "../../../config/paths";
 
@@ -29,7 +29,7 @@ const OrderConfirmationPage = () => {
 
     const { isLoading, addressData, orderData, shippingMethodsData } =
         useOrderConfirmation(addressId, trackingCode, selectedShippingMethodId);
-
+    
     const orderCode = trackingCode;
 
     const handleCopyToClipboard = () => {

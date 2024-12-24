@@ -20,7 +20,7 @@ def get_cart_items():
 
     cart = services.get_user_cart(user.id)
     if not cart:
-        return jsonify({"message": "Cart not found"}), 404
+        return jsonify({"message": "Cart items retrieved successfully", "data": []}), 200
 
     cart_items = cart.cart_items
 

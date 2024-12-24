@@ -2,10 +2,10 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import "../../../../styles/components/market/cart/OrderSummary.scss";
-import PriceSection from "../product/PriceSection";
+import PriceSection from "../../../components/market/product/PriceSection";
 import { formatCurrency } from "../../../utils/formatCurrency";
-import { useOrderSummary } from "../../../hooks/cart/useOrderSummary";
-import { Item } from "../../../features/product/schemas/itemSchema";
+import { useOrderSummary } from "../hooks/useOrderSummary";
+import { Item } from "../../product/schemas/itemSchema";
 
 type OrderPreviewType = {
     orderItems: Item[];
