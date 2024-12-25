@@ -12,11 +12,20 @@ import PriceSection from "./PriceSection";
 import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
 import { Item } from "../../../features/product/schemas/itemSchema";
+import { useCategoryById } from "../../../features/categories/hooks/useCategoryById";
 
-const ProductCard = ({ id, name, price, image, category, discount }: Item) => {
+const ProductCard = ({
+    id,
+    name,
+    price,
+    image,
+    category: categoryId,
+    discount,
+}: Item) => {
     const navigate = useNavigate();
     const onCardClick = () => navigate(paths.MARKET.BY_PRODUCT_ID(id ?? 1));
     const { addToCart } = useShoppingCart();
+    const category = useCategoryById(Number(categoryId))?.name ?? "Other";
     return (
         <Grid>
             <Card className="product-card" onClick={onCardClick}>

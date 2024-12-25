@@ -2,7 +2,6 @@ import Root from "../../../components/market/layout/Root";
 import OrderSummary from "../components/OrderSummary";
 import CustomerTrustSection from "../components/CustomerTrustSection";
 import ProductList from "../components/ProductList";
-import { useProduct } from "../../product/hooks/useProduct";
 import { useTranslation } from "react-i18next";
 import ProductSlider from "../../../components/market/slider/ProductSlider";
 import Container from "@mui/material/Container";
@@ -12,11 +11,13 @@ import Grid2 from "@mui/material/Grid2";
 import EmptyCart from "../components/EmptyCart";
 import { useShoppingCart } from "../context";
 import "../styles/CartPage.scss";
+import { useProductsOnDiscountQuery } from "../../product/hooks/useProductsOnDiscountQuery";
 
 const CartPage = () => {
     const { t } = useTranslation("cart-page");
     const { cartItems, cartQuantity } = useShoppingCart();
-    const { itemsOnDiscount } = useProduct();
+    const { data: ProductsOnDiscount } = useProductsOnDiscountQuery();
+
     return (
         <Root>
             <Container maxWidth="xl" className="cart-page">
@@ -52,7 +53,7 @@ const CartPage = () => {
                 )}
                 <ProductSlider
                     label={t("sliderLabel")}
-                    data={itemsOnDiscount}
+                    data={ProductsOnDiscount}
                 />
             </Container>
         </Root>

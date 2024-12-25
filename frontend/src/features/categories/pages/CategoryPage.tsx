@@ -4,30 +4,22 @@ import Root from "../../../components/market/layout/Root";
 import { useNavigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../../../config/query";
 import Message from "../../../components/shared/feedback/Message";
-import { useCategoryPage } from "../hooks/useCategoryPage";
-import { useCategory } from "../context";
+import { useCategoryProductsQuery } from "../hooks/useCategoryProductsQuery";
 import "../styles/CategoryPage.scss";
+import { useValidCategory } from "../hooks/useValidCategory";
 
 const CategoryPage = () => {
     const { category } = useParams();
-    const { categories } = useCategory();
-    const { fetchCategoryItem } = useCategoryPage();
     const navigate = useNavigate();
 
-    const isValidCategory = categories.some((cat) => cat.name === category);
+    const isValidCategory = useValidCategory(category ?? "Other");
 
     const {
         data: categoryItems,
         isLoading,
         error,
-    } = useQuery({
-        enabled: isValidCategory,
-        queryKey: [queryKeys.CATEGORY_ITEMS, category],
-        queryFn: () => fetchCategoryItem(category ?? "Other"),
-    });
+    } = useCategoryProductsQuery(category, isValidCategory);
 
     if (!isValidCategory) {
         navigate(-1);

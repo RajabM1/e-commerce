@@ -8,7 +8,6 @@ import { useTheme } from "@mui/material/styles";
 import { NextArrow } from "./layout/NextArrow";
 import { PrevArrow } from "./layout/PrevArrow";
 import ProductCard from "../product/ProductCard";
-import { useCategory } from "../../../features/categories/context";
 import { Item } from "../../../features/product/schemas/itemSchema";
 
 interface Props {
@@ -49,10 +48,6 @@ const ProductSlider = ({ label, bgcolor, textColor, data }: Props) => {
         ],
     };
 
-    const { categories } = useCategory();
-    const getCategoryById = (id: number) =>
-        categories.find((category) => category.id === id);
-
     return (
         <Box
             sx={{
@@ -82,10 +77,7 @@ const ProductSlider = ({ label, bgcolor, textColor, data }: Props) => {
                             name={item.name}
                             price={item.price}
                             image={item.image}
-                            category={
-                                getCategoryById(Number(item.category))?.name ??
-                                "Other"
-                            }
+                            category={item.category}
                             discount={item.discount}
                         />
                     </Box>

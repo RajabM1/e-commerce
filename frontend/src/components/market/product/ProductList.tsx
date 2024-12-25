@@ -5,13 +5,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import SearchAppBar from "../../shared/search/SearchBar";
-import { useCategory } from "../../../features/categories/context";
 import { Item } from "../../../features/product/schemas/itemSchema";
 
 const ProductList = ({ data }: { data: Item[] }) => {
-    const { categories } = useCategory();
-    const getCategoryById = (id: number) =>
-        categories.find((category) => category.id === id);
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
@@ -55,9 +51,7 @@ const ProductList = ({ data }: { data: Item[] }) => {
                                 name={item.name}
                                 price={item.price}
                                 image={item.image ?? ""}
-                                category={
-                                    getCategoryById(Number(item.category))?.name ?? "Other"
-                                }
+                                category={item.category}
                                 discount={item.discount}
                             />
                         </Grid>

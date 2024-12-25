@@ -1,9 +1,8 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ImageSection from "../../../features/product/components/ImageSection";
 import Rating from "../../../features/product/components/Rating";
-import { useProduct } from "../hooks/useProduct";
 import QuantitySelector from "../../../components/market/product/QuantitySelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import ProductSlider from "../../../components/market/slider/ProductSlider";
 import { useTranslation } from "react-i18next";
@@ -11,36 +10,32 @@ import PriceSection from "../../../components/market/product/PriceSection";
 import { useShoppingCart } from "../../cart/context";
 import Root from "../../../components/market/layout/Root";
 import "../styles/ProductPage.scss";
-import HttpService from "../../../service/HttpService";
-import endpoints from "../../../config/api";
-import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../../../config/query";
+import { useProductsOnDiscountQuery } from "../hooks/useProductsOnDiscountQuery";
+import { useProductByIdQuery } from "../hooks/useProductByIdQuery";
 
 const ProductPage = () => {
     const { t } = useTranslation("product-page");
     const { id } = useParams();
+
+    const { data: productsOnDiscount, isLoading: isProductsOnDiscountLoading } =
+        useProductsOnDiscountQuery();
+    const { data: product, isLoading: isProductLoading } = useProductByIdQuery(
+        Number(id)
+    );
+
     const { addToCart } = useShoppingCart();
-    const { itemsOnDiscount } = useProduct();
     const [quantity, setQuantity] = useState(1);
     const navigate = useNavigate();
 
-    const fetchProductById = async (id: number) => {
-        const response = await HttpService.getRequest(
-            endpoints.PRODUCT.BY_ID(id)
-        );
+    useEffect(() => {
         setQuantity(1);
-        return response.data;
-    };
-    const { data: formData, isLoading } = useQuery({
-        queryKey: [queryKeys.PRODUCT, id],
-        queryFn: () => fetchProductById(Number(id)),
-    });
+    }, [id]);
 
-    if (isLoading) {
+    if (isProductsOnDiscountLoading || isProductLoading) {
         return <div>Loading...</div>;
     }
 
-    if (!formData) {
+    if (!product) {
         navigate(-1);
         return null;
     }
@@ -50,23 +45,23 @@ const ProductPage = () => {
             <Container maxWidth="xl" className="product-container">
                 <Box className="product-box">
                     <ImageSection
-                        imageUrl={formData.image ?? ""}
-                        name={formData.name}
+                        imageUrl={product.image ?? ""}
+                        name={product.name}
                     />
                     <Box className="product-info">
                         <Typography className="product-name" variant="h5">
-                            {formData.name}
+                            {product.name}
                         </Typography>
                         <Box className="rate-price-section">
                             <PriceSection
-                                discount={formData.discount}
-                                price={formData.price}
+                                discount={product.discount}
+                                price={product.price}
                             />
                             <Rating rating={t("rating")} />
                         </Box>
 
                         <Typography variant="body1" className="description">
-                            {formData.description}
+                            {product.description}
                         </Typography>
 
                         <Box className="quantity-cart-section">
@@ -79,9 +74,9 @@ const ProductPage = () => {
                                 variant="contained"
                                 onClick={() => {
                                     addToCart({
-                                        itemId: formData.id ?? 0,
+                                        itemId: product.id ?? 0,
                                         quantity,
-                                        price: formData.price,
+                                        price: product.price,
                                     });
                                     setQuantity(1);
                                 }}
@@ -99,7 +94,7 @@ const ProductPage = () => {
             <Container maxWidth="xl">
                 <ProductSlider
                     label={t("sliderLabel")}
-                    data={itemsOnDiscount}
+                    data={productsOnDiscount}
                 />
             </Container>
         </Root>

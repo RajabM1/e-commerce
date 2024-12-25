@@ -2,17 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useCategory } from "../../../features/categories/context";
 import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
 import { Item } from "../../../features/product/schemas/itemSchema";
 import PriceSection from "../../../components/market/product/PriceSection";
 import QuantitySelector from "../../../components/market/product/QuantitySelector";
 import ProductActionSection from "../../../components/market/product/ProductActionSection";
+import { useCategoryById } from "../../categories/hooks/useCategoryById";
 
 const ProductList = ({ data }: { data: Item[] }) => {
     const navigate = useNavigate();
-    const { categories } = useCategory();
     const { updateCartItemQuantity } = useShoppingCart();
 
     const [, setItemQuantities] = useState(
@@ -26,8 +25,8 @@ const ProductList = ({ data }: { data: Item[] }) => {
         updateCartItemQuantity({ itemId: id, quantity });
     };
 
-    const getCategoryById = (id: number) =>
-        categories.find((category) => category.id === id);
+    const getCategoryById = useCategoryById;
+
     const handleNavigate = (id: number) =>
         navigate(paths.MARKET.BY_PRODUCT_ID(id));
 
