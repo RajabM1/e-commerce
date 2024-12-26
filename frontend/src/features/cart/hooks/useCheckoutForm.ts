@@ -11,6 +11,7 @@ import { ShippingMethodType } from "../../../types/shippingMethods";
 import endpoints from "../../../config/api";
 import { paths } from "../../../config/paths";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../../config/query";
 
 export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
     const queryClient = useQueryClient();
@@ -78,7 +79,9 @@ export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
                         },
                     });
                 }
-                queryClient.invalidateQueries({ queryKey: ["CartItems"] });
+                queryClient.invalidateQueries({
+                    queryKey: [queryKeys.CART_ITEMS],
+                });
             }
         },
         onError: () => {

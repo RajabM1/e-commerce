@@ -1,9 +1,11 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useMemo } from "react";
 import ShoppingCartContext from "./ShoppingCartContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../auth/context";
 import { Item } from "../../product/schemas/itemSchema";
 import * as Services from "./services";
+import { queryKeys } from "../../../config/query";
+
 const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
     const { currentUser } = useAuth();
     const queryClient = useQueryClient();
@@ -11,35 +13,43 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
     const { data: cartItems } = useQuery<Item[]>({
         initialData: [],
         enabled: !!currentUser,
-        queryKey: ["CartItems"],
+        queryKey: [queryKeys.CART_ITEMS],
         queryFn: () => Services.fetchCartItems(),
     });
 
-    const calculateCartQuantity = () => {
-        return cartItems?.reduce(
+    const cartQuantity = useMemo(() => {
+        return cartItems.reduce(
             (total, item) => total + (item.quantity || 0),
             0
         );
-    };
+    }, [cartItems]);
 
-    const cartQuantity = calculateCartQuantity();
     const addToCartMutation = useMutation({
         mutationFn: Services.addToCart,
-        onSuccess: (data) => {
-            queryClient.setQueryData<Item[]>(["CartItems"], (oldData) => [
-                ...(oldData ?? []),
-                data,
-            ]);
+        onMutate: async (data) => {
+            const product = await Services.fetchItemById(data.itemId);
+            queryClient.setQueryData<Item[]>(
+                [queryKeys.CART_ITEMS],
+                (oldData) => [
+                    ...(oldData ?? []),
+                    { ...product, quantity: data.quantity },
+                ]
+            );
+        },
+        onError: () => {
+            queryClient.invalidateQueries({ queryKey: [queryKeys.CART_ITEMS] });
         },
     });
 
     const updateCartItemMutation = useMutation({
         mutationFn: Services.updateCartItem,
         onSuccess: (_, { itemId, quantity }) => {
-            queryClient.setQueryData<Item[]>(["CartItems"], (oldData) =>
-                oldData?.map((item) =>
-                    item.id === itemId ? { ...item, quantity } : item
-                )
+            queryClient.setQueryData<Item[]>(
+                [queryKeys.CART_ITEMS],
+                (oldData) =>
+                    oldData?.map((item) =>
+                        item.id === itemId ? { ...item, quantity } : item
+                    )
             );
         },
     });
@@ -47,8 +57,9 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
     const removeFromCartMutation = useMutation({
         mutationFn: Services.removeItemFromCart,
         onSuccess: (_, itemId) => {
-            queryClient.setQueryData<Item[]>(["CartItems"], (oldData) =>
-                oldData?.filter((item) => item.id !== itemId)
+            queryClient.setQueryData<Item[]>(
+                [queryKeys.CART_ITEMS],
+                (oldData) => oldData?.filter((item) => item.id !== itemId)
             );
         },
     });

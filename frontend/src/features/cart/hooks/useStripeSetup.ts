@@ -1,8 +1,8 @@
 import { loadStripe, Stripe } from "@stripe/stripe-js";
-import HttpService from "../../../service/HttpService";
-import endpoints from "../../../config/api";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { queryKeys } from "../../../config/query";
+import * as Services from "../services/stripeSetupServices";
 
 export const useStripeSetup = (amount: number) => {
     const [stripePromise, setStripePromise] =
@@ -14,13 +14,8 @@ export const useStripeSetup = (amount: number) => {
         error,
         isSuccess,
     } = useQuery({
-        queryKey: ["stripeConfig"],
-        queryFn: async () => {
-            const response = await HttpService.getRequest(
-                endpoints.STRIPE.CONFIG
-            );
-            return response.data;
-        },
+        queryKey: [queryKeys.STRIPE_CONFIG],
+        queryFn: () => Services.fetchStripeConfig(),
     });
 
     useEffect(() => {
@@ -34,17 +29,8 @@ export const useStripeSetup = (amount: number) => {
     }
 
     const { data: clientSecret } = useQuery({
-        queryKey: ["paymentIntent"],
-        queryFn: async () => {
-            const response = await HttpService.postRequest(
-                endpoints.STRIPE.CREATE_PAYMENT_INTENT,
-                {
-                    amount: amountInCents,
-                    currency: "usd",
-                }
-            );
-            return response.data.clientSecret;
-        },
+        queryKey: [queryKeys.PAYMENT_INTENT],
+        queryFn: () => Services.fetchPaymentIntent(amountInCents),
     });
 
     return { stripePromise, clientSecret };

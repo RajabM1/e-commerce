@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useShoppingCart } from "../context";
 import { useMutation } from "@tanstack/react-query";
+import { ApiError } from "../../../types/apiError";
 
 interface Props {
     couponCode: string;
@@ -37,10 +38,9 @@ export const useCoupon = (
             setCouponCode(couponCode.trim().toUpperCase());
             setIsCouponApplied(true);
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onError: (error: any)=>{
-            setErrorMessage(error.response?.data?.message)
-        }
+        onError: (error: ApiError) => {
+            setErrorMessage(error.response.data.message);
+        },
     });
 
     return {

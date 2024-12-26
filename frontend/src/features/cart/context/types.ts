@@ -11,7 +11,6 @@ export interface IShoppingCartContext {
             itemId: number;
             quantity: number;
             price: number;
-            event?: React.MouseEvent<HTMLButtonElement, MouseEvent>;
         },
         unknown
     >;

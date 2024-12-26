@@ -5,4 +5,10 @@ export const queryKeys = {
     PRODUCT: "Product",
     PRODUCTS: "Products",
     ON_DISCOUNT_PRODUCTS: "DiscountProducts",
+    CART_ITEMS: "CartItems",
+    SHIPPING_METHODS: "ShippingMethods",
+    ORDER_INFORMATION: "OrderInformation",
+    SELECTED_SHIPPING_METHODS: "SelectedShippingMethods",
+    STRIPE_CONFIG: "StripeConfig",
+    PAYMENT_INTENT: "PaymentIntent",
 };

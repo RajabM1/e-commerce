@@ -20,10 +20,6 @@ export const addToCart = async ({
         quantity,
         price,
     });
-    const itemResponse = await HttpService.getRequest(
-        endpoints.PRODUCT.BY_ID(itemId)
-    );
-    return { ...itemResponse.data, quantity };
 };
 
 export const updateCartItem = async ({
