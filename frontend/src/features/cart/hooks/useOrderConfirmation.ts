@@ -8,18 +8,21 @@ export const useOrderConfirmation = (
     selectedShippingMethodId: string
 ) => {
     const { data: addressData, isLoading: isAddressLoading } = useQuery({
-        queryKey: [queryKeys.SHIPPING_METHODS],
+        queryKey: [queryKeys.USER_ADDRESS, { addressId }],
         queryFn: () => Services.fetchAddressData(addressId),
     });
 
     const { data: orderData, isLoading: isOrderLoading } = useQuery({
-        queryKey: [queryKeys.ORDER_INFORMATION],
+        queryKey: [queryKeys.ORDER_INFORMATION, { orderCode }],
         queryFn: () => Services.fetchOrderData(orderCode),
     });
 
     const { data: shippingMethodsData, isLoading: isShippingMethodsLoading } =
         useQuery({
-            queryKey: [queryKeys.SELECTED_SHIPPING_METHODS],
+            queryKey: [
+                queryKeys.SELECTED_SHIPPING_METHODS,
+                { selectedShippingMethodId },
+            ],
             queryFn: () =>
                 Services.fetchShippingMethodsData(selectedShippingMethodId),
         });

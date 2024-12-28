@@ -7,31 +7,45 @@ import * as Services from "../services/stripeSetupServices";
 export const useStripeSetup = (amount: number) => {
     const [stripePromise, setStripePromise] =
         useState<Promise<Stripe | null> | null>(null);
+    const [hasClientSecret, setHasClientSecret] = useState<boolean>(false);
+
     const amountInCents = amount * 100;
 
     const {
         data: stripeConfig,
-        error,
-        isSuccess,
+        error: stripeConfigError,
+        isSuccess: isStripeConfigSuccess,
     } = useQuery({
         queryKey: [queryKeys.STRIPE_CONFIG],
         queryFn: () => Services.fetchStripeConfig(),
     });
 
     useEffect(() => {
-        if (isSuccess && stripeConfig) {
+        if (
+            isStripeConfigSuccess &&
+            stripeConfig &&
+            stripeConfig.publishableKey
+        ) {
             setStripePromise(loadStripe(stripeConfig.publishableKey));
         }
-    }, [isSuccess, stripeConfig]);
+    }, [isStripeConfigSuccess, stripeConfig]);
 
-    if (error) {
-        console.error("Error fetching Stripe configuration:", error);
+    if (stripeConfigError) {
+        console.error(
+            "Error fetching Stripe configuration:",
+            stripeConfigError
+        );
     }
 
-    const { data: clientSecret } = useQuery({
+    const { data: clientSecret, isSuccess: isClientSecretSuccess } = useQuery({
         queryKey: [queryKeys.PAYMENT_INTENT],
         queryFn: () => Services.fetchPaymentIntent(amountInCents),
+        enabled: !hasClientSecret,
     });
+
+    if (isClientSecretSuccess && !hasClientSecret) {
+        setHasClientSecret(true);
+    }
 
     return { stripePromise, clientSecret };
 };

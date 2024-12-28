@@ -11,4 +11,5 @@ export const queryKeys = {
     SELECTED_SHIPPING_METHODS: "SelectedShippingMethods",
     STRIPE_CONFIG: "StripeConfig",
     PAYMENT_INTENT: "PaymentIntent",
+    USER_ADDRESS: "UserAddress",
 };
