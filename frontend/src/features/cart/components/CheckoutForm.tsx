@@ -3,6 +3,7 @@ import { PaymentElement, AddressElement } from "@stripe/react-stripe-js";
 import { StripeAddressElementOptions } from "@stripe/stripe-js";
 import { useCheckoutForm } from "../hooks/useCheckoutForm";
 import ShippingMethods from "./ShippingMethods";
+import { useEffect } from "react";
 
 interface Props {
     clientSecret: string;
@@ -19,7 +20,9 @@ const CheckoutForm = ({ clientSecret, setShippingFees, orderTotal }: Props) => {
         handleShippingMethodSelect,
     } = useCheckoutForm(clientSecret, orderTotal);
 
-    setShippingFees(selectedShippingMethod?.cost ?? null);
+    useEffect(() => {
+        setShippingFees(selectedShippingMethod?.cost ?? null);
+    }, [selectedShippingMethod?.cost, setShippingFees]);
 
     const addressOptions: StripeAddressElementOptions = {
         mode: "shipping",

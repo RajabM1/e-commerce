@@ -27,16 +27,59 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
     const addToCartMutation = useMutation({
         mutationFn: Services.addToCart,
         onMutate: async (data) => {
-            const product = await Services.fetchItemById(data.itemId);
+            await queryClient.cancelQueries({
+                queryKey: [queryKeys.CART_ITEMS],
+            });
+
+            const previousCart = queryClient.getQueryData<Item[]>([
+                queryKeys.CART_ITEMS,
+            ]);
+
+            const product = queryClient.getQueryData<Item>([
+                queryKeys.PRODUCT,
+                { productId: data.itemId },
+            ]) ?? {
+                id: data.itemId,
+                name: "Loading...",
+                price: 0,
+                image: "Loading...",
+                discount: 0,
+                category: "Loading...",
+            };
+
             queryClient.setQueryData<Item[]>(
                 [queryKeys.CART_ITEMS],
-                (oldData) => [
-                    ...(oldData ?? []),
-                    { ...product, quantity: data.quantity },
-                ]
+                (oldData) => {
+                    const cartItem = oldData ?? [];
+                    const existingItemIndex = cartItems.findIndex(
+                        (item) => item.id === data.itemId
+                    );
+
+                    if (existingItemIndex > -1) {
+                        const updatedCartItems = [...cartItems];
+                        updatedCartItems[existingItemIndex] = {
+                            ...updatedCartItems[existingItemIndex],
+                            quantity:
+                                (updatedCartItems[existingItemIndex]
+                                    ?.quantity || 0) + data.quantity,
+                        };
+                        return [...updatedCartItems];
+                    }
+                    return [
+                        ...cartItem,
+                        { ...product, quantity: data.quantity },
+                    ];
+                }
+            );
+            return { previousCart };
+        },
+        onError: (_error, _data, context) => {
+            queryClient.setQueryData(
+                [queryKeys.CART_ITEMS],
+                context?.previousCart
             );
         },
-        onError: () => {
+        onSettled: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.CART_ITEMS] });
         },
     });

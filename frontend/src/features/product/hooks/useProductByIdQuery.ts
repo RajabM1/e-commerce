@@ -4,7 +4,7 @@ import * as productServices from "../services/productServices";
 
 export const useProductByIdQuery = (productId: number) => {
     const productByIdQuery = useQuery({
-        queryKey: [queryKeys.PRODUCT, productId],
+        queryKey: [queryKeys.PRODUCT, { productId }],
         queryFn: () => productServices.fetchProductById(productId),
     });
 

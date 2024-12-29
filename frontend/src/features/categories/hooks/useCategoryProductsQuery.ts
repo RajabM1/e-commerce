@@ -7,7 +7,7 @@ export const useCategoryProductsQuery = (
     enabled: boolean = true
 ) => {
     const categoryProductsQuery = useQuery({
-        queryKey: [queryKeys.CATEGORY_ITEMS, category],
+        queryKey: [queryKeys.CATEGORY_ITEMS, { category }],
         queryFn: () => Services.fetchCategoryItem(category ?? "Other"),
         enabled,
     });

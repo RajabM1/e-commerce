@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
 import { AddressElement } from "@stripe/react-stripe-js";
-import HttpService from "../../../service/HttpService";
 import {
     StripeAddressElement,
     StripeAddressElementChangeEvent,
 } from "@stripe/stripe-js";
 import { useNavigate } from "react-router-dom";
 import { ShippingMethodType } from "../../../types/shippingMethods";
-import endpoints from "../../../config/api";
 import { paths } from "../../../config/paths";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../../config/query";
+import * as Services from "../services/checkoutFormServices";
 
 export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
     const queryClient = useQueryClient();
@@ -26,27 +25,21 @@ export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
     const saveAddressAndOrderMutation = useMutation({
         mutationFn: async (addressElement: StripeAddressElement) => {
             const addressData = await addressElement.getValue();
-            const addressResponse = await HttpService.postRequest(
-                endpoints.USER.ADDRESSES,
-                addressData
-            );
-            const addressId = addressResponse.data.id;
+            const addressResponse = await Services.saveAddress(addressData);
+            const addressId = addressResponse.id;
 
-            const orderResponse = await HttpService.postRequest(
-                endpoints.ORDER.CREATE,
-                {
-                    addressId,
-                    shippingMethodId: Number(selectedShippingMethod?.id),
-                }
+            const orderResponse = await Services.saveOrder(
+                addressId,
+                selectedShippingMethod?.id ?? ""
             );
-            const trackingCode = orderResponse.data.tracking_code;
-            await HttpService.deleteRequest(endpoints.SHIPPING_CART.DELETE);
+            const trackingCode = orderResponse.tracking_code;
 
             return {
                 addressId,
                 trackingCode,
             };
         },
+        onSuccess: () => Services.deleteShippingCart(),
     });
 
     const handlePaymentSubmitMutation = useMutation({
@@ -56,9 +49,6 @@ export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
             const response = await stripe.confirmPayment({
                 elements,
                 redirect: "if_required",
-                confirmParams: {
-                    return_url: "http://localhost:5173/order/confirmation",
-                },
             });
             return response;
         },
@@ -95,15 +85,9 @@ export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
             const stripeResponse = await stripe?.retrievePaymentIntent(
                 clientSecret
             );
-            const paymentIntentId = stripeResponse?.paymentIntent?.id;
-            await HttpService.postRequest(
-                endpoints.STRIPE.UPDATE_PAYMENT_INTENT,
-                {
-                    paymentIntentId: paymentIntentId,
-                    amount: (orderTotal + method.cost) * 100,
-                    currency: "usd",
-                }
-            );
+            const paymentIntentId = stripeResponse?.paymentIntent?.id ?? "";
+            const amount = orderTotal + method.cost;
+            Services.updatePaymentIntent(paymentIntentId, amount);
         },
     });
 

@@ -9,6 +9,7 @@ import "../../../../styles/components/market/cart/ShippingMethods.scss";
 import endpoints from "../../../config/api";
 import { useQuery } from "@tanstack/react-query";
 import HttpService from "../../../service/HttpService";
+import { queryKeys } from "../../../config/query";
 
 const ShippingMethods = ({
     selectedMethod,
@@ -16,7 +17,7 @@ const ShippingMethods = ({
 }: IShippingMethods) => {
     const { data: shippingMethods, isLoading } = useQuery<ShippingMethodType[]>(
         {
-            queryKey: ["shippingMethods"],
+            queryKey: [queryKeys.SHIPPING_METHODS],
             queryFn: async () => {
                 const response = await HttpService.getRequest(
                     endpoints.ORDER.SHIPPING_METHODS
