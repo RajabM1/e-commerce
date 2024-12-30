@@ -47,6 +47,11 @@ const endpoints = {
         CREATE_PAYMENT_INTENT: `${API_BASE_URL}/stripe/create-payment-intent`,
         CONFIG: `${API_BASE_URL}/stripe/config`,
     },
+    WISHLIST: {
+        GET: `${API_BASE_URL}/wishlist`,
+        POST: `${API_BASE_URL}/wishlist/items`,
+        DELETE: (id: number) => `${API_BASE_URL}/wishlist/items/${id}`,
+    },
 };
 
 export default endpoints;

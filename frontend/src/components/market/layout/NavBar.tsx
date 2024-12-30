@@ -50,7 +50,7 @@ function NavBar() {
 
     const settings = [
         { label: t("settings.profile"), to: "#" },
-        { label: t("settings.wishlist"), to: "#" },
+        { label: t("settings.wishlist"), to: paths.MARKET.WISHLIST },
         {
             label: t("settings.logout"),
             onClick: () => {

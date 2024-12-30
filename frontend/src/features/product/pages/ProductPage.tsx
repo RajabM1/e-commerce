@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ImageSection from "../../../features/product/components/ImageSection";
 import Rating from "../../../features/product/components/Rating";
 import QuantitySelector from "../../../components/market/product/QuantitySelector";
@@ -12,6 +12,7 @@ import Root from "../../../components/market/layout/Root";
 import "../styles/ProductPage.scss";
 import { useProductsOnDiscountQuery } from "../hooks/useProductsOnDiscountQuery";
 import { useProductByIdQuery } from "../hooks/useProductByIdQuery";
+import { useWishlistToggle } from "../../wishlist/hooks/useWishlistToggle";
 
 const ProductPage = () => {
     const { t } = useTranslation("product-page");
@@ -22,6 +23,7 @@ const ProductPage = () => {
     const { data: product, isLoading: isProductLoading } = useProductByIdQuery(
         Number(id)
     );
+    const { handleWishList, isWishlist } = useWishlistToggle(Number(id));
 
     const { addToCart } = useShoppingCart();
     const [quantity, setQuantity] = useState(1);
@@ -85,9 +87,14 @@ const ProductPage = () => {
                             </Button>
                         </Box>
 
-                        <Link className="wishlist-link" to={"#"}>
-                            {t("add_to_wishlist")}
-                        </Link>
+                        <Button
+                            className="wishlist-link"
+                            onClick={handleWishList}
+                        >
+                            {isWishlist
+                                ? t("remove_from_wishlist")
+                                : t("add_to_wishlist")}
+                        </Button>
                     </Box>
                 </Box>
             </Container>

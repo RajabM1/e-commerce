@@ -13,6 +13,10 @@ import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
 import { Item } from "../../../features/product/schemas/itemSchema";
 import { useCategoryById } from "../../../features/categories/hooks/useCategoryById";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { IconButton } from "@mui/material";
+import { useWishlistToggle } from "../../../features/wishlist/hooks/useWishlistToggle";
 
 const ProductCard = ({
     id,
@@ -25,7 +29,10 @@ const ProductCard = ({
     const navigate = useNavigate();
     const onCardClick = () => navigate(paths.MARKET.BY_PRODUCT_ID(id ?? 1));
     const { addToCart } = useShoppingCart();
+    const { handleWishList, isWishlist } = useWishlistToggle(id);
+
     const category = useCategoryById(Number(categoryId))?.name ?? "Other";
+
     return (
         <Grid>
             <Card className="product-card" onClick={onCardClick}>
@@ -38,6 +45,22 @@ const ProductCard = ({
                     />
                     <Box className="category-badge">
                         <Typography variant="body2">{category}</Typography>
+                    </Box>
+
+                    <Box
+                        className="wishlist-badge"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleWishList();
+                        }}
+                    >
+                        <IconButton sx={{ backgroundColor: "whitesmoke" }}>
+                            {isWishlist ? (
+                                <FavoriteIcon color="error" />
+                            ) : (
+                                <FavoriteBorderIcon />
+                            )}
+                        </IconButton>
                     </Box>
                 </Box>
                 <CardContent className="card-content">

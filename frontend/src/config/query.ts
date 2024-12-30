@@ -12,4 +12,5 @@ export const queryKeys = {
     STRIPE_CONFIG: "StripeConfig",
     PAYMENT_INTENT: "PaymentIntent",
     USER_ADDRESS: "UserAddress",
+    WISHLIST: "Wishlist",
 };

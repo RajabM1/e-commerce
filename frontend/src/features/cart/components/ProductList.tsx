@@ -9,8 +9,15 @@ import PriceSection from "../../../components/market/product/PriceSection";
 import QuantitySelector from "../../../components/market/product/QuantitySelector";
 import ProductActionSection from "../../../components/market/product/ProductActionSection";
 import { useCategoryById } from "../../categories/hooks/useCategoryById";
+import "../../../../styles/components/market/cart/ProductList.scss";
 
-const ProductList = ({ data }: { data: Item[] }) => {
+const ProductList = ({
+    data,
+    isWishlistPage,
+}: {
+    data: Item[];
+    isWishlistPage: boolean;
+}) => {
     const navigate = useNavigate();
     const { updateCartItemQuantity } = useShoppingCart();
 
@@ -61,18 +68,22 @@ const ProductList = ({ data }: { data: Item[] }) => {
                     </Box>
 
                     <Box className="product-item-actions">
-                        <QuantitySelector
-                            quantity={row.quantity ?? 1}
-                            setQuantity={(quantity: number) =>
-                                setQuantity(row.id ?? 1, quantity)
-                            }
-                        />
+                        {!isWishlistPage && (
+                            <QuantitySelector
+                                quantity={row.quantity ?? 1}
+                                setQuantity={(quantity: number) =>
+                                    setQuantity(row.id ?? 1, quantity)
+                                }
+                            />
+                        )}
                         <ProductActionSection
                             id={row.id ?? 0}
                             category={
                                 getCategoryById(Number(row.category))?.name ??
                                 "Other"
                             }
+                            price={row.price}
+                            isWishlistPage={isWishlistPage}
                         />
                     </Box>
                 </Box>

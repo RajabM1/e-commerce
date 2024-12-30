@@ -26,6 +26,9 @@ const CheckoutPage = lazy(
 const OrderConfirmationPage = lazy(
     () => import("../../features/cart/pages/OrderConfirmationPage")
 );
+const WishlistPage = lazy(
+    () => import("../../features/wishlist/pages/WishlistPage")
+);
 
 const userRoutes = [
     {
@@ -105,6 +108,14 @@ const userRoutes = [
         element: (
             <ProtectedRoute allowedRoles={["user"]}>
                 <OrderConfirmationPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: paths.MARKET.WISHLIST,
+        element: (
+            <ProtectedRoute allowedRoles={["user"]}>
+                <WishlistPage />
             </ProtectedRoute>
         ),
     },
