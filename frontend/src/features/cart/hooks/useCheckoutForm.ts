@@ -40,46 +40,45 @@ export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
             };
         },
         onSuccess: () => Services.deleteShippingCart(),
-    });
+    }).mutateAsync;
 
-    const handlePaymentSubmitMutation = useMutation({
-        mutationFn: async (event: React.FormEvent) => {
-            event.preventDefault();
-            if (!stripe || !elements) return;
-            const response = await stripe.confirmPayment({
-                elements,
-                redirect: "if_required",
-            });
-            return response;
-        },
-        onSuccess: async (data) => {
-            if (data?.paymentIntent?.status === "succeeded") {
-                const addressElement = elements?.getElement(AddressElement);
-                if (addressElement) {
-                    const { addressId, trackingCode } =
-                        await saveAddressAndOrderMutation.mutateAsync(
-                            addressElement
-                        );
-                    navigate(paths.ORDER.CONFIRMATION, {
-                        state: {
-                            addressId,
-                            trackingCode,
-                            selectedShippingMethodId:
-                                selectedShippingMethod?.id,
-                        },
+    const { mutateAsync: handlePaymentSubmit, status: paymentStatus } =
+        useMutation({
+            mutationFn: async (event: React.FormEvent) => {
+                event.preventDefault();
+                if (!stripe || !elements) return;
+                const response = await stripe.confirmPayment({
+                    elements,
+                    redirect: "if_required",
+                });
+                return response;
+            },
+            onSuccess: async (data) => {
+                if (data?.paymentIntent?.status === "succeeded") {
+                    const addressElement = elements?.getElement(AddressElement);
+                    if (addressElement) {
+                        const { addressId, trackingCode } =
+                            await saveAddressAndOrderMutation(addressElement);
+                        navigate(paths.ORDER.CONFIRMATION, {
+                            state: {
+                                addressId,
+                                trackingCode,
+                                selectedShippingMethodId:
+                                    selectedShippingMethod?.id,
+                            },
+                        });
+                    }
+                    queryClient.invalidateQueries({
+                        queryKey: [queryKeys.CART_ITEMS],
                     });
                 }
-                queryClient.invalidateQueries({
-                    queryKey: [queryKeys.CART_ITEMS],
-                });
-            }
-        },
-        onError: () => {
-            console.log("Payment submission error:");
-        },
-    });
+            },
+            onError: () => {
+                console.log("Payment submission error:");
+            },
+        });
 
-    const handleShippingMethodSelectMutation = useMutation({
+    const handleShippingMethodSelect = useMutation({
         mutationFn: async (method: ShippingMethodType) => {
             setSelectedShippingMethod(method);
             const stripeResponse = await stripe?.retrievePaymentIntent(
@@ -89,17 +88,16 @@ export const useCheckoutForm = (clientSecret: string, orderTotal: number) => {
             const amount = orderTotal + method.cost;
             Services.updatePaymentIntent(paymentIntentId, amount);
         },
-    });
+    }).mutateAsync;
 
     const handleAddressChange = (event: StripeAddressElementChangeEvent) => {
         setIsAddressComplete(event.complete);
     };
 
     return {
-        isLoading: handlePaymentSubmitMutation.status === "pending",
-        handlePaymentSubmit: handlePaymentSubmitMutation.mutateAsync,
-        handleShippingMethodSelect:
-            handleShippingMethodSelectMutation.mutateAsync,
+        isLoading: paymentStatus === "pending",
+        handlePaymentSubmit,
+        handleShippingMethodSelect,
         handleAddressChange,
         selectedShippingMethod,
         isAddressComplete,

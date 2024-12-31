@@ -52,7 +52,7 @@ export const handleCouponApply = async ({
         couponCode,
         cartTotal,
     });
-    return response.data?.discountAmount || 0;
+    return response.data;
 };
 
 export const fetchItemById = async (id: number) => {

@@ -23,32 +23,35 @@ export const useCoupon = (
     const [isCouponApplied, setIsCouponApplied] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    const handleApplyCouponMutation = useMutation({
-        mutationFn: async () => {
-            if (!couponCode.trim()) return;
-            const response = await handleCouponApply({
-                couponCode: couponCode.trim().toUpperCase(),
-                cartTotal,
-            });
-            return response;
-        },
-        onSuccess: (data) => {
-            setErrorMessage("");
-            setDiscount(data);
-            setCouponCode(couponCode.trim().toUpperCase());
-            setIsCouponApplied(true);
-        },
-        onError: (error: ApiError) => {
-            setErrorMessage(error.response.data.message);
-        },
-    });
+    const { mutateAsync: handleApplyCoupon, status: applyCouponStatus } =
+        useMutation({
+            mutationFn: async () => {
+                if (!couponCode.trim()) {
+                    throw new ApiError("Coupon code cannot be empty");
+                }
+                const response = await handleCouponApply({
+                    couponCode: couponCode.trim().toUpperCase(),
+                    cartTotal,
+                });
+                return response;
+            },
+            onSuccess: (data) => {
+                setErrorMessage("");
+                setDiscount(data.discountAmount);
+                setCouponCode(couponCode.trim().toUpperCase());
+                setIsCouponApplied(true);
+            },
+            onError: (error: ApiError) => {
+                setErrorMessage(error.response.data.message);
+            },
+        });
 
     return {
         couponCode,
         isCouponApplied,
-        isLoading: handleApplyCouponMutation.status === "pending",
+        isLoading: applyCouponStatus === "pending",
         errorMessage,
         updateCouponCode,
-        handleApplyCoupon: handleApplyCouponMutation.mutateAsync,
+        handleApplyCoupon,
     };
 };

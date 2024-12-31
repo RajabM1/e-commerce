@@ -24,7 +24,7 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
         );
     }, [cartItems]);
 
-    const addToCartMutation = useMutation({
+    const addToCart = useMutation({
         mutationFn: Services.addToCart,
         onMutate: async (data) => {
             await queryClient.cancelQueries({
@@ -82,9 +82,9 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.CART_ITEMS] });
         },
-    });
+    }).mutateAsync;
 
-    const updateCartItemMutation = useMutation({
+    const updateCartItemQuantity = useMutation({
         mutationFn: Services.updateCartItem,
         onSuccess: (_, { itemId, quantity }) => {
             queryClient.setQueryData<Item[]>(
@@ -95,9 +95,9 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
                     )
             );
         },
-    });
+    }).mutateAsync;
 
-    const removeFromCartMutation = useMutation({
+    const removeFromCart = useMutation({
         mutationFn: Services.removeItemFromCart,
         onSuccess: (_, itemId) => {
             queryClient.setQueryData<Item[]>(
@@ -105,19 +105,19 @@ const ShoppingCartProvider = ({ children }: PropsWithChildren) => {
                 (oldData) => oldData?.filter((item) => item.id !== itemId)
             );
         },
-    });
+    }).mutateAsync;
 
-    const handleCouponApplyMutation = useMutation({
+    const handleCouponApply = useMutation({
         mutationFn: Services.handleCouponApply,
-    });
+    }).mutateAsync;
 
     const valueToReturn = {
         cartQuantity,
         cartItems,
-        addToCart: addToCartMutation.mutateAsync,
-        removeFromCart: removeFromCartMutation.mutateAsync,
-        updateCartItemQuantity: updateCartItemMutation.mutateAsync,
-        handleCouponApply: handleCouponApplyMutation.mutateAsync,
+        addToCart,
+        removeFromCart,
+        updateCartItemQuantity,
+        handleCouponApply,
     };
 
     return (

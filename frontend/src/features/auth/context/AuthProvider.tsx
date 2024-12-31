@@ -19,7 +19,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         queryFn: () => Services.fetchCurrentUser(authToken),
     });
 
-    const loginMutation = useMutation({
+    const handleLogin = useMutation({
         mutationFn: Services.login,
         onSuccess: (data) => {
             setTokens(data.access_token, data.refresh_token);
@@ -27,9 +27,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
                 queryKey: [queryKeys.CURRENT_USER],
             });
         },
-    });
+    }).mutateAsync;
 
-    const registerMutation = useMutation({
+    const handleRegister = useMutation({
         mutationFn: Services.register,
         onSuccess: (data) => {
             setTokens(data.access_token, data.refresh_token);
@@ -37,17 +37,17 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
                 queryKey: [queryKeys.CURRENT_USER],
             });
         },
-    });
+    }).mutateAsync;
 
-    const forgetPasswordMutation = useMutation({
+    const handleForgetPassword = useMutation({
         mutationFn: Services.forgetPassword,
-    });
+    }).mutateAsync;
 
-    const resetPasswordMutation = useMutation({
+    const handleResetPassword = useMutation({
         mutationFn: Services.resetPassword,
-    });
+    }).mutateAsync;
 
-    const logoutMutation = useMutation({
+    const { status: logoutStatus, mutateAsync: handleLogout } = useMutation({
         mutationFn: Services.logout,
         onSettled: () => {
             queryClient.clear();
@@ -56,14 +56,14 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     });
 
     const valueToReturn = {
-        isLoading: isUserLoading || logoutMutation.status === "pending",
+        isLoading: isUserLoading || logoutStatus === "pending",
         authToken,
         currentUser,
-        handleRegister: registerMutation.mutateAsync,
-        handleLogin: loginMutation.mutateAsync,
-        handleForgetPassword: forgetPasswordMutation.mutateAsync,
-        handleResetPassword: resetPasswordMutation.mutateAsync,
-        handleLogout: logoutMutation.mutateAsync,
+        handleRegister,
+        handleLogin,
+        handleForgetPassword,
+        handleResetPassword,
+        handleLogout,
     };
 
     return (
