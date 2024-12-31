@@ -1,4 +1,4 @@
-import { useWishlist } from "./useWishlist";
+import { useWishlist } from "../context";
 
 export const useWishlistToggle = (productId: number) => {
     const { addToWishList, removeFromWishlist, wishlistItems } = useWishlist();

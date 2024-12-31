@@ -1,16 +1,20 @@
 import { Box, Container, Grid2, Typography } from "@mui/material";
 import Root from "../../../components/market/layout/Root";
-import { useWishlist } from "../hooks/useWishlist";
 import ProductList from "../../cart/components/ProductList";
 import ProductSlider from "../../../components/market/slider/ProductSlider";
 import { useTranslation } from "react-i18next";
 import EmptyWishlist from "../components/EmptyWishlist";
 import "../styles/WishlistPage.scss";
+import { useWishlist } from "../context";
+import { useProductsOnDiscountQuery } from "../../product/hooks/useProductsOnDiscountQuery";
 
 const WishlistPage = () => {
     const { t } = useTranslation("wishlist-page");
-    const { productOnDiscount, isLoading, wishlistItems } = useWishlist();
-    if (isLoading) {
+    const { isLoading: wishlistProducts, wishlistItems } = useWishlist();
+    const { data: productsOnDiscount, isLoading: productsOnDiscountLoading } =
+        useProductsOnDiscountQuery();
+
+    if (productsOnDiscountLoading || wishlistProducts) {
         return <div>Loading ...</div>;
     }
     return (
@@ -37,7 +41,7 @@ const WishlistPage = () => {
                 )}
                 <ProductSlider
                     label={t("sliderLabel")}
-                    data={productOnDiscount}
+                    data={productsOnDiscount}
                 />
             </Container>
         </Root>

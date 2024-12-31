@@ -1,19 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useProductsOnDiscountQuery } from "../../product/hooks/useProductsOnDiscountQuery";
 import { queryKeys } from "../../../config/query";
 import { Item } from "../../product/schemas/itemSchema";
-import * as Services from "../services/wishlistServices";
+import * as Services from "./services";
+import { PropsWithChildren } from "react";
+import WishlistContext from "./WishlistContext";
+import { useAuth } from "../../auth/context";
 
-export const useWishlist = () => {
+const WishlistProvider = ({ children }: PropsWithChildren) => {
+    const { currentUser } = useAuth();
     const queryClient = useQueryClient();
-    const { data: productOnDiscount, isLoading: onDiscountLoading } =
-        useProductsOnDiscountQuery();
 
     const { data: wishlistItems, isLoading: wishlistItemLoading } = useQuery<
         Item[]
     >({
         queryKey: [queryKeys.WISHLIST],
         queryFn: () => Services.fetchWishlistProduct(),
+        enabled: !!currentUser,
     });
 
     const addToWishList = useMutation({
@@ -83,11 +85,18 @@ export const useWishlist = () => {
         },
     }).mutateAsync;
 
-    return {
+    const valueToReturn = {
         wishlistItems,
-        productOnDiscount,
-        isLoading: onDiscountLoading || wishlistItemLoading,
+        isLoading: wishlistItemLoading,
         addToWishList,
         removeFromWishlist,
     };
+
+    return (
+        <WishlistContext.Provider value={valueToReturn}>
+            {children}
+        </WishlistContext.Provider>
+    );
 };
+
+export default WishlistProvider;
