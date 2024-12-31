@@ -1,24 +1,36 @@
-import { PropsWithChildren } from "react";
+import { lazy, PropsWithChildren } from "react";
 import { getUserRole } from "../../utils/jwtHelpers";
-import UnauthorizedPage from "../../features/errors/pages/UnauthorizedPage";
-import { useAuth } from "../../features/auth/context/AuthContext";
+import { useAuth } from "../../features/auth/context";
 
+const UnauthorizedPage = lazy(
+    () => import("../../features/errors/pages/UnauthorizedPage")
+);
+const LoginPage = lazy(() => import("../../features/auth/pages/LoginPage"));
 
 type ProtectedRouteProps = PropsWithChildren & {
     allowedRoles: Array<string>;
 };
 
-export default function ProtectedRoute({
+export const ProtectedRoute = ({
     allowedRoles,
     children,
-}: ProtectedRouteProps) {
-    const { currentUser } = useAuth();
+}: ProtectedRouteProps) => {
+    const { currentUser, isLoading } = useAuth();
 
-    if (currentUser === undefined) {
+    if (isLoading) {
         return <div>Loading...</div>;
     }
 
+    if (currentUser === undefined && allowedRoles.includes("guest")) {
+        return children;
+    }
+
+    if (currentUser === undefined) {
+        return <LoginPage />;
+    }
+
     if (
+        currentUser &&
         allowedRoles &&
         allowedRoles.length > 0 &&
         !allowedRoles.includes(getUserRole(currentUser))
@@ -27,4 +39,4 @@ export default function ProtectedRoute({
     }
 
     return children;
-}
+};

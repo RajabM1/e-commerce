@@ -5,7 +5,7 @@ import AppleIcon from "@mui/icons-material/Apple";
 
 const SocialAuthButtons = () => {
     return (
-        <Box className="social-login">
+        <Box className="social-container">
             <Avatar variant="rounded" className="social-icon">
                 <GoogleIcon />
             </Avatar>

@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import ProtectedRoute from "./ProtectedRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 import { paths } from "../../config/paths";
 
 const LoginPage = lazy(() => import("../../features/auth/pages/LoginPage"));
@@ -12,15 +12,22 @@ const ForgetPasswordPage = lazy(
 const ResetPasswordPage = lazy(
     () => import("../../features/auth/pages/ResetPasswordPage")
 );
-const Home = lazy(() => import("../../pages/market/Home"));
-const ProductPage = lazy(() => import("../../pages/market/items/ProductPage"));
-const CategoryPage = lazy(
-    () => import("../../pages/market/categories/CategoryPage")
+const Home = lazy(() => import("../../pages/Home"));
+const ProductPage = lazy(
+    () => import("../../features/product/pages/ProductPage")
 );
-const CartPage = lazy(() => import("../../pages/market/cart/CartPage"));
-const CheckoutPage = lazy(() => import("../../pages/market/cart/CheckoutPage"));
+const CategoryPage = lazy(
+    () => import("../../features/categories/pages/CategoryPage")
+);
+const CartPage = lazy(() => import("../../features/cart/pages/CartPage"));
+const CheckoutPage = lazy(
+    () => import("../../features/cart/pages/CheckoutPage")
+);
 const OrderConfirmationPage = lazy(
-    () => import("../../pages/market/cart/OrderConfirmationPage")
+    () => import("../../features/cart/pages/OrderConfirmationPage")
+);
+const WishlistPage = lazy(
+    () => import("../../features/wishlist/pages/WishlistPage")
 );
 
 const userRoutes = [
@@ -101,6 +108,14 @@ const userRoutes = [
         element: (
             <ProtectedRoute allowedRoles={["user"]}>
                 <OrderConfirmationPage />
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: paths.MARKET.WISHLIST,
+        element: (
+            <ProtectedRoute allowedRoles={["user"]}>
+                <WishlistPage />
             </ProtectedRoute>
         ),
     },

@@ -8,15 +8,31 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid2";
 import { useNavigate } from "react-router-dom";
-import { Item } from "../../../types/item";
 import PriceSection from "./PriceSection";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
+import { Item } from "../../../features/product/schemas/itemSchema";
+import { useCategoryById } from "../../../features/categories/hooks/useCategoryById";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { IconButton } from "@mui/material";
+import { useWishlistToggle } from "../../../features/wishlist/hooks/useWishlistToggle";
 
-const ProductCard = ({ id, name, price, image, category, discount }: Item) => {
+const ProductCard = ({
+    id,
+    name,
+    price,
+    image,
+    category: categoryId,
+    discount,
+}: Item) => {
     const navigate = useNavigate();
     const onCardClick = () => navigate(paths.MARKET.BY_PRODUCT_ID(id ?? 1));
     const { addToCart } = useShoppingCart();
+    const { handleWishList, isWishlist } = useWishlistToggle(id);
+
+    const category = useCategoryById(Number(categoryId))?.name ?? "Other";
+
     return (
         <Grid>
             <Card className="product-card" onClick={onCardClick}>
@@ -29,6 +45,22 @@ const ProductCard = ({ id, name, price, image, category, discount }: Item) => {
                     />
                     <Box className="category-badge">
                         <Typography variant="body2">{category}</Typography>
+                    </Box>
+
+                    <Box
+                        className="wishlist-badge"
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            handleWishList();
+                        }}
+                    >
+                        <IconButton sx={{ backgroundColor: "whitesmoke" }}>
+                            {isWishlist ? (
+                                <FavoriteIcon color="error" />
+                            ) : (
+                                <FavoriteBorderIcon />
+                            )}
+                        </IconButton>
                     </Box>
                 </Box>
                 <CardContent className="card-content">
@@ -57,7 +89,14 @@ const ProductCard = ({ id, name, price, image, category, discount }: Item) => {
                 <CardActions className="card-actions">
                     <Button
                         variant="outlined"
-                        onClick={(e) => addToCart(id ?? 0, 1, price, e)}
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            addToCart({
+                                itemId: id,
+                                quantity: 1,
+                                price,
+                            });
+                        }}
                     >
                         Add to Cart
                     </Button>

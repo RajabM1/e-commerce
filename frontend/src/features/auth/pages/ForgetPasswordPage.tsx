@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { paths } from "../../../config/paths";
 import { useForgetPasswordForm } from "../hooks/useForgetPasswordForm";
 import Message from "../../../components/shared/feedback/Message";
-import "../styles/ForgetPasswordPage.scss";
+import "../styles/AuthPage.scss";
 
 const ForgetPasswordPage = () => {
     const { t } = useTranslation("forget-password-page");
@@ -21,7 +21,7 @@ const ForgetPasswordPage = () => {
     } = useForgetPasswordForm();
 
     return (
-        <Container className="forget-password-page" maxWidth="sm">
+        <Container className="page-container" maxWidth="sm">
             {pageMessage && (
                 <Message
                     message={pageMessage.message}
@@ -50,7 +50,7 @@ const ForgetPasswordPage = () => {
                     isSubmitting={isSubmitting}
                 />
 
-                <Box className="login-link">
+                <Box className="link">
                     <TextWithLink
                         text=""
                         linkText={t("labels.back")}

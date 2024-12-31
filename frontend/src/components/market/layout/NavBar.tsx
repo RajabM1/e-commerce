@@ -18,9 +18,9 @@ import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Badge from "@mui/material/Badge";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../../features/auth/context/AuthContext";
-import { useCategory } from "../../../contexts/CategoryContext";
-import { useShoppingCart } from "../../../contexts/ShoppingCartContext";
+import { useAuth } from "../../../features/auth/context";
+import { useCategory } from "../../../features/categories/context";
+import { useShoppingCart } from "../../../features/cart/context";
 import { paths } from "../../../config/paths";
 
 function NavBar() {
@@ -50,8 +50,14 @@ function NavBar() {
 
     const settings = [
         { label: t("settings.profile"), to: "#" },
-        { label: t("settings.wishlist"), to: "#" },
-        { label: t("settings.logout"), onClick: () => handleLogout() },
+        { label: t("settings.wishlist"), to: paths.MARKET.WISHLIST },
+        {
+            label: t("settings.logout"),
+            onClick: () => {
+                navigate(paths.AUTH.LOGIN, { replace: true });
+                handleLogout();
+            },
+        },
     ];
 
     return (

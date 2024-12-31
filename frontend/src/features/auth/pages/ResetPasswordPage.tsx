@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import { paths } from "../../../config/paths";
 import Message from "../../../components/shared/feedback/Message";
 import { useResetPasswordForm } from "../hooks/useResetPasswordForm";
-import "../styles/ForgetPasswordPage.scss";
 import PasswordInput from "../../../components/shared/form/PasswordInput";
+import "../styles/AuthPage.scss";
 
 const ResetPasswordPage = () => {
     const { t } = useTranslation("reset-password-page");
@@ -21,7 +21,7 @@ const ResetPasswordPage = () => {
     } = useResetPasswordForm();
 
     return (
-        <Container className="forget-password-page" maxWidth="sm">
+        <Container className="page-container" maxWidth="sm">
             {pageMessage && (
                 <Message
                     message={pageMessage.message}
@@ -58,7 +58,7 @@ const ResetPasswordPage = () => {
                     isSubmitting={isSubmitting}
                 />
 
-                <Box className="login-link">
+                <Box className="link">
                     <TextWithLink
                         text=""
                         linkText={t("labels.back")}

@@ -18,5 +18,6 @@ export const paths = {
         CATEGORY: "/market/:category",
         BY_CATEGORY: (category: string) => `/market/${category}`,
         BY_PRODUCT_ID: (id: number) => `/market/product/${id}`,
+        WISHLIST: "/market/wishlist",
     },
 };

@@ -6,7 +6,7 @@ import {
     resetPasswordSchema,
 } from "../schemas/resetPasswordSchema";
 import { PageMessageType } from "../../../types/pageMessage";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { paths } from "../../../config/paths";
@@ -27,10 +27,10 @@ export const useResetPasswordForm = () => {
         resolver: zodResolver(resetPasswordSchema),
     });
 
-    const onSubmit: SubmitHandler<resetPasswordForm> = async (data) => {
+    const onSubmit: SubmitHandler<resetPasswordForm> = async (formData) => {
         setPageMessage(null);
         try {
-            await handleResetPassword(data, token ?? "");
+            await handleResetPassword({ formData, token: token ?? "" });
             navigate(paths.AUTH.LOGIN);
         } catch {
             setPageMessage({

@@ -2,7 +2,7 @@ import { Box, ButtonBase, Typography } from "@mui/material";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Category } from "../../../types/category";
+import { Category } from "../../../features/categories/schemas/categorySchema";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../../config/paths";
 

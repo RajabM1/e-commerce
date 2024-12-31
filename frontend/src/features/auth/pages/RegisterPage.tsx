@@ -10,8 +10,8 @@ import { paths } from "../../../config/paths";
 import AuthHeader from "../components/AuthHeader";
 import FormInput from "../../../components/shared/form/FormInput";
 import SubmitButton from "../../../components/shared/buttons/SubmitButton";
-import "../styles/RegisterPage.scss";
 import PasswordInput from "../../../components/shared/form/PasswordInput";
+import "../styles/AuthPage.scss";
 
 const RegisterPage = () => {
     const { t } = useTranslation("register-page");
@@ -25,7 +25,7 @@ const RegisterPage = () => {
     } = useRegisterForm();
 
     return (
-        <Container className="register-page" maxWidth="sm">
+        <Container className="page-container" maxWidth="sm">
             {pageMessage && (
                 <Message
                     message={pageMessage.message}
@@ -39,7 +39,7 @@ const RegisterPage = () => {
             />
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-                <Box mt={3}>
+                <Box className="form-input">
                     <FormInput
                         type="text"
                         id="username"
@@ -49,7 +49,7 @@ const RegisterPage = () => {
                         register={register("username")}
                     />
                 </Box>
-                <Box mt={3}>
+                <Box className="form-input">
                     <FormInput
                         type="email"
                         id="email"
@@ -59,7 +59,7 @@ const RegisterPage = () => {
                         register={register("email")}
                     />
                 </Box>
-                <Box mt={3}>
+                <Box className="form-input">
                     <PasswordInput
                         id="password"
                         label={t("labels.password")}
@@ -68,7 +68,7 @@ const RegisterPage = () => {
                         register={register("password")}
                     />
                 </Box>
-                <Box mt={3}>
+                <Box className="form-input">
                     <PasswordInput
                         id="confirmPassword"
                         label={t("labels.confirm_password")}
@@ -88,7 +88,7 @@ const RegisterPage = () => {
 
                 <Divider className="divider">OR</Divider>
                 <SocialAuthButtons />
-                <Box className="login-link">
+                <Box className="link">
                     <TextWithLink
                         text={t("labels.already_have_account")}
                         linkText={t("labels.sign_in")}

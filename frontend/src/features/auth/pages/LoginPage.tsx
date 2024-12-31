@@ -13,8 +13,8 @@ import { paths } from "../../../config/paths";
 import AuthHeader from "../components/AuthHeader";
 import SubmitButton from "../../../components/shared/buttons/SubmitButton";
 import FormInput from "../../../components/shared/form/FormInput";
-import "../styles/LoginPage.scss";
 import PasswordInput from "../../../components/shared/form/PasswordInput";
+import "../styles/AuthPage.scss";
 
 const LoginPage = () => {
     const { t } = useTranslation("login-page");
@@ -28,7 +28,7 @@ const LoginPage = () => {
     } = useLoginForm();
 
     return (
-        <Container className="login-page" maxWidth="sm">
+        <Container className="page-container" maxWidth="sm">
             {pageMessage && (
                 <Message
                     message={pageMessage.message}
@@ -42,7 +42,7 @@ const LoginPage = () => {
             />
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-                <Box mt={3}>
+                <Box className="form-input">
                     <FormInput
                         type="text"
                         id="username"
@@ -52,7 +52,7 @@ const LoginPage = () => {
                         register={register("username")}
                     />
                 </Box>
-                <Box mt={3}>
+                <Box>
                     <PasswordInput
                         id="password"
                         label={t("labels.password")}
@@ -80,7 +80,7 @@ const LoginPage = () => {
 
                 <Divider className="divider">OR</Divider>
                 <SocialAuthButtons />
-                <Box className="signup-link">
+                <Box className="link">
                     <TextWithLink
                         text={t("labels.do_not_have_account")}
                         linkText={t("labels.sign_up")}

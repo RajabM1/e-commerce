@@ -41,6 +41,22 @@ def get_item_by_id(item_id):
     )
 
 
+@product_bp.route("/on-discount", methods=["GET"])
+@jwt_required()
+def get_items_on_discount():
+    items = product_services.get_items_on_discount()
+
+    return (
+        jsonify(
+            {
+                "message": "Item On discount retrieved successfully",
+                "data": items_schema.dump(items),
+            }
+        ),
+        200,
+    )
+
+
 @product_bp.route("", methods=["POST"])
 @admin_required()
 def create_item():

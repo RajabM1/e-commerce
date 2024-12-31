@@ -1,10 +1,12 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginForm, loginSchema } from "../schemas/loginSchema";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PageMessageType } from "../../../types/pageMessage";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../../../config/paths";
 
 export const useLoginForm = () => {
     const { t } = useTranslation("login-page");
@@ -12,6 +14,7 @@ export const useLoginForm = () => {
     const [pageMessage, setPageMessage] = useState<PageMessageType | null>(
         null
     );
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -24,6 +27,7 @@ export const useLoginForm = () => {
         setPageMessage(null);
         try {
             await handleLogin(data);
+            navigate(paths.HOME, { replace: true });
         } catch {
             setPageMessage({
                 message: t("messages.invalid_data"),
