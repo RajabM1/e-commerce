@@ -34,7 +34,10 @@ const CartPage = () => {
                         </Box>
                         <Grid2 container spacing={2} p={2}>
                             <Grid2 size={{ xs: 12, md: 8 }}>
-                                <ProductList data={cartItems} />
+                                <ProductList
+                                    data={cartItems}
+                                    isWishlistPage={false}
+                                />
                             </Grid2>
 
                             <Grid2
